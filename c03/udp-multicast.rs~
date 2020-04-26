@@ -1,0 +1,15 @@
+use std::net::{Ipv4Addr, UdpSocket};
+use std::{env, str};
+
+fn main() {
+    let mcast_group: Ipv4Addr = "239.0.0.1".parse().unwrap();
+    let port: u16 = 6000;
+    let any = "0.0.0.0".parse().unwrap();
+    let mut buffer = [0u8; 1600];
+    if env::args().count() > 1 {
+        let socket = UdpSocket::bind((any, port)).expect("Could not bind client socket");
+        socket
+            .join_multicast_v4(&mcast_group, &any)
+            .expect("Could not join multicast group");
+    }
+}
